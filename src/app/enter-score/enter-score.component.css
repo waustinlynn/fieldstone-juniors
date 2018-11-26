@@ -1,0 +1,8 @@
+.parentContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.entryContainer {
+    display: flex;
+}

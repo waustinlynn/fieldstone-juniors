@@ -1,0 +1,43 @@
+<span class="parentContainer">
+  <span class="entryContainer">
+    <p-dropdown [options]="divisions" appendTo="body" (onChange)="divisionChange($event)" [(ngModel)]="selectedDivision" placeholder="Select Division"></p-dropdown>
+    <p-dropdown *ngIf="selectedDivision != undefined" (onChange)="teamChange()" [options]="teams" appendTo="body" [(ngModel)]="selectedTeam1"
+      placeholder="Select Team 1"></p-dropdown>
+    <p-dropdown *ngIf="selectedDivision != undefined" (onChange)="teamChange()" [options]="teams" appendTo="body" [(ngModel)]="selectedTeam2"
+      placeholder="Select Team 2"></p-dropdown>
+  </span>
+  <hr />
+  <span class="entryContainer" *ngIf="matchParticipants.length > 0">
+    Winner:
+    <p-selectButton [options]="matchParticipants" [(ngModel)]="winner"></p-selectButton>
+  </span>
+  <hr />
+  <span class="entryContainer" *ngIf="matchParticipants.length > 0">
+    <span class="ui-float-label">
+      <input id="float-input" type="text" size="30" pInputText [(ngModel)]="score">
+      <label for="float-input">Score</label>
+    </span>
+  </span>
+  <hr />
+  <span class="entryContainer" *ngIf="score != undefined && score.length > 0">
+    <button pButton (click)="submit()">Save</button>
+  </span>
+</span>
+<span class="parentContainer" *ngIf="matchData.length > 0">
+  <p-table [value]="matchData">
+    <ng-template pTemplate="header">
+      <tr>
+        <td *ngFor="let col of columnData">{{col.label}}</td>
+        <td></td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td *ngFor="let col of columnData">{{row[col.value]}}</td>
+        <td>
+          <button (click)="delete(row)">Delete</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</span>

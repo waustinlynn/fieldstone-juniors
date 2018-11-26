@@ -1,0 +1,12 @@
+<p-table [value]="data">
+  <ng-template pTemplate="header">
+    <tr>
+      <td *ngFor="let col of columnData">{{col.label}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-row>
+    <tr>
+      <td *ngFor="let col of columnData">{{row[col.value]}}</td>
+    </tr>
+  </ng-template>
+</p-table>
