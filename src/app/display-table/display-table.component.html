@@ -1,4 +1,28 @@
-<p-table [value]="data">
+<span *ngIf="renderTabs">
+  <p-tabView>
+    <p-tabPanel [selected]="true" header="Rules">
+      <app-rules></app-rules>
+    </p-tabPanel>
+    <span *ngFor="let divData of masterData">
+      <p-tabPanel header="{{divData.name}}">
+        <p-table [value]="divData.results">
+          <ng-template pTemplate="header">
+            <tr>
+              <td *ngFor="let col of columnData">{{col.label}}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td *ngFor="let col of columnData">{{row[col.value]}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-tabPanel>
+    </span>
+  </p-tabView>
+</span>
+
+<!-- <p-table [value]="data">
   <ng-template pTemplate="header">
     <tr>
       <td *ngFor="let col of columnData">{{col.label}}</td>
@@ -9,4 +33,4 @@
       <td *ngFor="let col of columnData">{{row[col.value]}}</td>
     </tr>
   </ng-template>
-</p-table>
+</p-table> -->

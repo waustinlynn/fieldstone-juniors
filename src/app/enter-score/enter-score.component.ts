@@ -21,6 +21,10 @@ export class EnterScoreComponent implements OnInit {
   data: any;
   matchData: any[] = [];
   constructor(private service: DataService, private router: Router) {
+
+  }
+
+  resetData() {
     this.divisions = [];
     this.teams = [];
     this.selectedDivision = undefined;
@@ -33,11 +37,8 @@ export class EnterScoreComponent implements OnInit {
     this.matchData = [];
   }
 
-  resetData() {
-
-  }
-
   getData() {
+    this.resetData();
     this.service.getData.pipe(first()).subscribe((r: any) => {
       this.data = JSON.parse(r);
       console.log(this.data);

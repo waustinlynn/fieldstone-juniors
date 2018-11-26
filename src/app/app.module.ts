@@ -13,9 +13,11 @@ import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { InputTextModule } from 'primeng/inputtext';
+import { TabViewModule } from 'primeng/tabview';
 import { EnterScoreComponent } from './enter-score/enter-score.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DataService } from './data.service';
+import { RulesComponent } from './rules/rules.component';
 
 const routes: Routes = [
   { path: 'admin', component: EnterScoreComponent },
@@ -28,7 +30,8 @@ const routes: Routes = [
     AppComponent,
     DisplayTableComponent,
     EnterScoreComponent,
-    DashboardComponent
+    DashboardComponent,
+    RulesComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +43,7 @@ const routes: Routes = [
     DropdownModule,
     SelectButtonModule,
     InputTextModule,
+    TabViewModule,
     RouterModule.forRoot(routes)
   ],
   providers: [DataService],

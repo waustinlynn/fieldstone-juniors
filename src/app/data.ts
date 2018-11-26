@@ -2,6 +2,12 @@ export const Meyer_Niksich = 'M Meyer / N Niksich';
 export const Brady_Brady = 'C Brady / J Brady';
 export const Olson_Howard = 'K Olson / T Howard';
 export const McDaniel_Kalicheti = 'M McDaniel / K Kalicheti';
+
+export const Smith_Jones = 'A Smith / M Jones';
+export const Wales_Spieth = 'J Wales / M Spieth';
+export const Turner_Belongie = 'N Turner / P Belongie';
+export const Wagoner_Miers = 'G Wagoner / L Miers';
+
 export const TBD = 'TBD';
 
 export const appData = {
@@ -15,42 +21,19 @@ export const appData = {
                 McDaniel_Kalicheti
             ],
             matches: [
-                // {
-                //     team1: Meyer_Niksich,
-                //     team2: Brady_Brady,
-                //     score: TBD,
-                //     winner: TBD
-                // },
-                // {
-                //     team1: Meyer_Niksich,
-                //     team2: Olson_Howard,
-                //     score: TBD,
-                //     winner: TBD
-                // },
-                // {
-                //     team1: Meyer_Niksich,
-                //     team2: McDaniel_Kalicheti,
-                //     score: TBD,
-                //     winner: TBD
-                // },
-                // {
-                //     team1: Brady_Brady,
-                //     team2: McDaniel_Kalicheti,
-                //     score: TBD,
-                //     winner: TBD
-                // },
-                // {
-                //     team1: Olson_Howard,
-                //     team2: McDaniel_Kalicheti,
-                //     score: TBD,
-                //     winner: TBD
-                // },
-                // {
-                //     team1: Brady_Brady,
-                //     team2: Olson_Howard,
-                //     score: TBD,
-                //     winner: TBD
-                // }
+
+            ]
+        },
+        {
+            name: 'Division 2',
+            teams: [
+                Smith_Jones,
+                Wales_Spieth,
+                Turner_Belongie,
+                Wagoner_Miers
+            ],
+            matches: [
+
             ]
         }
     ]

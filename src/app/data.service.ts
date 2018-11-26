@@ -31,4 +31,9 @@ export class DataService {
   saveData(incoming: any) {
     return this.postData(incoming);
   }
+
+  loadFresh() {
+    let seedData = data.appData;
+    return this.postData(seedData);
+  }
 }
