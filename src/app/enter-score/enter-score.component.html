@@ -1,11 +1,13 @@
-<a href="/">Back to Home</a>
-
 <span *ngIf="!authorized" style="padding-top: 20px">
-  <span class="ui-float-label">
+  <form (ngSubmit)="unlock()" name="passwordForm">
+    <input placeholder="password" type="password" pInputText [(ngModel)]="password" name="password">&nbsp;
+    <button type="submit" (click)="unlock()">Unlock</button>
+  </form>
+  <!-- <span class="ui-float-label">
     <input id="float-input-1" type="password" size="30" pInputText [(ngModel)]="password">
     <label for="float-input-1">Password</label>
-  </span>
-  <button (click)="unlock()">Unlock</button>
+  </span> -->
+
   <span *ngIf="error.length > 0">{{error}}</span>
 </span>
 <span *ngIf="authorized">

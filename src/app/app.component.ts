@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fieldstone',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'fieldstone-jrs';
+  title = 'Fieldstone Juniors';
+  constructor(private router: Router) {
+
+  }
+
+  goHome() {
+    this.router.navigate(['/']);
+  }
 }
