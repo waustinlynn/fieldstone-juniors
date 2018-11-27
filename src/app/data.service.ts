@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as data from './data';
 import { HttpClient } from '@angular/common/http';
 import * as env from '../environments/environment';
+import { combineLatest } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,15 @@ export class DataService {
     return { headers: { Authorization: 'Basic fs-juniors' } };
   }
 
+  getTeams() {
+    return this.http.get(`${env.environment.apiUrl}/teams`, this.getAuthHeader());
+  }
+
+  saveTeams(teams: any) {
+    console.log(teams);
+    return this.http.post(`${env.environment.apiUrl}/teams`, teams, this.getAuthHeader());
+  }
+
 
   private postData(data: any) {
     return this.http.post(`${env.environment.apiUrl}/storage`,
@@ -25,15 +35,18 @@ export class DataService {
   }
 
   get getData() {
-    return this.http.get(`${env.environment.apiUrl}/storage/get/fs-jrs/data`, this.getAuthHeader());
+    return this.http.get(`${env.environment.apiUrl}/data`, this.getAuthHeader());
   }
 
   saveData(incoming: any) {
     return this.postData(incoming);
   }
 
-  loadFresh() {
-    let seedData = data.appData;
-    return this.postData(seedData);
+  loadTeams() {
+    return this.saveTeams(data.appData.teams);
+  }
+
+  loadData() {
+    return this.postData(data.appData.divisions);
   }
 }

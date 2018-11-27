@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:64411/api'
+  apiUrl: 'https://fieldstone-api.azurewebsites.net/api'
 };

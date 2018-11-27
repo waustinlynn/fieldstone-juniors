@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-enter-score',
@@ -10,15 +10,19 @@ import { first } from 'rxjs/operators';
 })
 export class EnterScoreComponent implements OnInit {
 
+  authorized: boolean = false;
+  password: string;
+  error: string = '';
   divisions = [];
+  divisionsMap = [];
   teams = [];
+  teamsMap = [];
   selectedDivision: string;
   selectedTeam1: string;
   selectedTeam2: string;
   winner: any;
   matchParticipants = [];
   score: any;
-  data: any;
   matchData: any[] = [];
   constructor(private service: DataService, private router: Router) {
 
@@ -26,24 +30,35 @@ export class EnterScoreComponent implements OnInit {
 
   resetData() {
     this.divisions = [];
+    this.divisionsMap = [];
     this.teams = [];
+    this.teamsMap = [];
     this.selectedDivision = undefined;
     this.selectedTeam1 = undefined;
     this.selectedTeam2 = undefined;
     this.winner = undefined;
     this.matchParticipants = [];
     this.score = undefined;
-    this.data = undefined;
     this.matchData = [];
   }
 
   getData() {
     this.resetData();
-    this.service.getData.pipe(first()).subscribe((r: any) => {
-      this.data = JSON.parse(r);
-      console.log(this.data);
-      this.loadDivisions();
-    });
+    combineLatest(this.service.getData, this.service.getTeams())
+      .pipe(first())
+      .subscribe(([divisions, teams]) => {
+        this.divisions = JSON.parse(divisions as any);
+        this.teams = JSON.parse(teams as any);
+        this.loadDivisions();
+      })
+  }
+
+  unlock() {
+    if (this.password == 'fs-jrs') {
+      this.authorized = true;
+    } else {
+      this.error = 'Invalid password';
+    }
   }
 
   ngOnInit() {
@@ -51,11 +66,11 @@ export class EnterScoreComponent implements OnInit {
   }
 
   divSelector() {
-    return this.data.divisions.filter(x => x.name == this.selectedDivision)[0];
+    return this.divisions.filter(x => x.name == this.selectedDivision)[0];
   }
 
   loadDivisions() {
-    this.divisions = this.data.divisions.map(x => {
+    this.divisionsMap = this.divisions.map(x => {
       return { label: x.name, value: x.name };
     });
   }
@@ -65,9 +80,12 @@ export class EnterScoreComponent implements OnInit {
   }
 
   loadTeams(division: string) {
-    this.teams = this.divSelector().teams.map(x => {
-      return { label: x, value: x };
-    });
+    this.teamsMap = this.teams
+      .filter(x => x.divisionName == division)[0]
+      .teams
+      .map(x => {
+        return { label: x, value: x };
+      });
   }
 
   divisionChange(event: any) {
@@ -98,7 +116,6 @@ export class EnterScoreComponent implements OnInit {
     };
     this.divSelector().matches.push(matchData);
     this.saveData();
-    // this.router.navigate(['/']);
   }
 
   delete(row: any) {
@@ -111,9 +128,8 @@ export class EnterScoreComponent implements OnInit {
   }
 
   saveData() {
-    this.service.saveData(this.data).pipe(first()).subscribe(r => {
+    this.service.saveData(this.divisions).pipe(first()).subscribe(r => {
       console.log('Save successful');
-      this.getData();
     });
   }
 

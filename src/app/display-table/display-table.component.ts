@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { first } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'display-table',
@@ -10,10 +11,11 @@ import { first } from 'rxjs/operators';
 export class DisplayTableComponent implements OnInit {
 
   //main app data with everything
-  appData: any;
+  divisions: any;
 
   //master data showing divisions and everything
   masterData: any[] = [];
+  teams: any[];
 
   //data for table
   data: any[];
@@ -33,16 +35,13 @@ export class DisplayTableComponent implements OnInit {
   ];
 
   constructScores() {
-    this.renderTabs = false;
-    console.log(this.renderTabs);
-    let divLength = this.appData.divisions.length;
+    let divLength = this.divisions.length;
     this.masterData = [];
     for (let i = 0; i < divLength; i++) {
-      let division = this.appData.divisions[i];
+      let division = this.divisions[i];
       let divisionName = division.name;
       if (i == 0) this.firstDivision = divisionName;
-
-      let teams = division.teams;
+      let teams = this.teams.filter(x => x.divisionName == divisionName)[0].teams;
       let matches = division.matches;
       let divisionTblData = {} as any;
       divisionTblData.name = divisionName;
@@ -55,9 +54,6 @@ export class DisplayTableComponent implements OnInit {
       divisionTblData.results = divisionTblData.results.sort(this.sort);
       this.masterData.push(divisionTblData);
     }
-    setTimeout(() => {
-      this.renderTabs = true;
-    }, 500);
   }
 
   calcTeamPoints(matches: any[], teamName: string) {
@@ -81,7 +77,10 @@ export class DisplayTableComponent implements OnInit {
       }
     }
 
-    let percentage = ((points / totalPoints) * 100).toFixed(0);
+    let pctNumber = ((points / totalPoints) * 100);
+
+    let percentage = isNaN(pctNumber) ? '-' : pctNumber.toFixed(0);
+
 
     let returnObj = {
       team: teamName,
@@ -96,24 +95,37 @@ export class DisplayTableComponent implements OnInit {
     this.data = [];
   }
 
+  seedData() {
+    return;
+    combineLatest(this.service.loadData(), this.service.loadTeams())
+      .pipe(first()).subscribe(r => {
+        this.initData();
+      })
+  }
+
   ngOnInit() {
-    // this.service.loadFresh().pipe(first()).subscribe(r => this.initData());
-    // this.initData();
   }
   ngAfterViewInit() {
     this.initData();
   }
 
   initData() {
-    this.service.getData.pipe(first()).subscribe((r: any) => {
-      this.appData = JSON.parse(r);
-      this.constructScores();
-    });
+    combineLatest(this.service.getTeams(), this.service.getData)
+      .subscribe(([teams, divisions]) => {
+        this.teams = JSON.parse(teams as any);
+        this.divisions = JSON.parse(divisions as any);
+        this.constructScores();
+      });
   }
 
   sort(a: any, b: any) {
     if (a.points == b.points) {
-      return a.percentage > b.percentage ? -1 : 1;
+      let aPct = +a.percentage;
+      let bPct = +b.percentage;
+      if (isNaN(bPct)) return -11;
+      if (isNaN(aPct) && !isNaN(bPct)) return 1;
+
+      return aPct > bPct ? -1 : 1;
     }
     return a.points > b.points ? -1 : 1;
   }
