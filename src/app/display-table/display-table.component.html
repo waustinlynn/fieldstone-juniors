@@ -4,15 +4,29 @@
   </p-tabPanel>
   <span *ngFor="let divData of masterData">
     <p-tabPanel header="{{divData.name}}">
-      <p-table [value]="divData.results">
+      <p-table [value]="divData.results" dataKey="team">
         <ng-template pTemplate="header">
           <tr>
+            <td style="width: 3em"></td>
             <td *ngFor="let col of columnData">{{col.label}}</td>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-row>
+        <ng-template pTemplate="body" let-row let-expanded="expanded">
           <tr>
+            <td>
+              <a href="#" [pRowToggler]="row">
+                <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+              </a>
+            </td>
             <td *ngFor="let col of columnData">{{row[col.value]}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-row let-columns="columnData">
+          <tr *ngFor="let md of row.matchData">
+            <td></td>
+            <td [attr.colspan]="columnData.length">
+              <span class="bold">{{md.winner}}</span> def. {{md.loser}} {{md.score}}
+            </td>
           </tr>
         </ng-template>
       </p-table>

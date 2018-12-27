@@ -56,6 +56,26 @@ export class DisplayTableComponent implements OnInit {
     }
   }
 
+  private parseForDefault(score) {
+    if (score.toLowerCase().includes('(default)')) {
+      return score.replace('(default)', '').trim();
+    }
+    return score.trim();
+  }
+
+  private parseNumbers(score) {
+    let locScore = score.split('-');
+    if (locScore.length <= 1) {
+      locScore = score.split(':');
+    }
+
+    if (+locScore[1] > +locScore[0]) {
+      return [+locScore[1], +locScore[0]];
+    }
+    return [+locScore[0], +locScore[1]];
+
+  }
+
   calcTeamPoints(matches: any[], teamName: string) {
     let wins = 0;
     let losses = 0;
@@ -65,7 +85,9 @@ export class DisplayTableComponent implements OnInit {
     for (let i = 0; i < matches.length; i++) {
       let thisMatch = matches[i];
       if (thisMatch.team1 == teamName || thisMatch.team2 == teamName) {
-        let score = thisMatch.score.split('-');
+        let score = thisMatch.score;
+        score = this.parseForDefault(score);
+        score = this.parseNumbers(score);
         if (thisMatch.winner == teamName) {
           wins++;
           points += +score[0];
@@ -86,9 +108,32 @@ export class DisplayTableComponent implements OnInit {
       team: teamName,
       points,
       record: `${wins}-${losses}`,
-      percentage
+      percentage,
+      matchData: this.getMatchData(teamName, matches)
     }
     return returnObj;
+  }
+
+  private getMatchData(teamName, matches) {
+    let playedMatches = matches.filter(match => match.team1 == teamName || match.team2 == teamName);
+    let teamResults = [];
+    playedMatches.forEach(match => {
+      let resultObj = {} as any;
+      resultObj.winner = match.winner;
+      let loser = match.team1;
+      if (match.winner == loser) {
+        loser = match.team2;
+      }
+      resultObj.loser = loser;
+      if (match.score.toLowerCase().includes('(default)')) {
+        resultObj.score = match.score;
+      } else {
+        let scoreNums = this.parseNumbers(match.score);
+        resultObj.score = `${scoreNums[0]} - ${scoreNums[1]}`;
+      }
+      teamResults.push(resultObj);
+    });
+    return teamResults;
   }
 
   constructor(private service: DataService) {
