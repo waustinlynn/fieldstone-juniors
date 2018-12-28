@@ -11,7 +11,9 @@
   <span *ngIf="error.length > 0">{{error}}</span>
 </span>
 <span *ngIf="authorized">
-
+  <h4>Upload File</h4>
+  <al-file-upload></al-file-upload>
+  <hr />
   <span class="parentContainer">
     <span class="entryContainer">
       <p-dropdown [options]="divisionsMap" appendTo="body" (onChange)="divisionChange($event)" [(ngModel)]="selectedDivision" placeholder="Select Division"></p-dropdown>

@@ -1,0 +1,8 @@
+.bold {
+    font-weight: 700;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+}

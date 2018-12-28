@@ -49,4 +49,8 @@ export class DataService {
   loadData() {
     return this.postData(data.appData.divisions);
   }
+
+  getBracket() {
+    return this.http.get(`${env.environment.apiUrl}/bracket`, this.getAuthHeader());
+  }
 }

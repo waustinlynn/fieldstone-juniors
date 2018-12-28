@@ -1,6 +1,9 @@
 <p-tabView>
-  <p-tabPanel [selected]="true" header="Rules">
+  <p-tabPanel header="Rules">
     <app-rules></app-rules>
+  </p-tabPanel>
+  <p-tabPanel [selected]="true" header="Playoffs">
+    <bracket></bracket>
   </p-tabPanel>
   <span *ngFor="let divData of masterData">
     <p-tabPanel header="{{divData.name}}">
@@ -32,4 +35,5 @@
       </p-table>
     </p-tabPanel>
   </span>
+
 </p-tabView>
